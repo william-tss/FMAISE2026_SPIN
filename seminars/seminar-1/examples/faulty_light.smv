@@ -1,0 +1,14 @@
+MODULE main
+VAR
+  light : {red, green, yellow};
+
+ASSIGN
+  init(light) := red;
+  next(light) := case
+                   light = red    : green;
+                   light = green  : yellow;
+                   light = yellow : red;
+                 esac;
+
+-- This specification is FALSE for our model
+SPEC AG (light = green -> AX light = red)
