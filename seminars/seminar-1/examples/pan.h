@@ -1,7 +1,7 @@
 #ifndef PAN_H
 #define PAN_H
 
-#define SpinVersion	"Spin Version 6.5.2 -- 6 December 2019"
+#define SpinVersion	"Spin Version 6.5.1 -- 20 December 2019"
 #define PanSource	"mutual_exclusion_wrong_2.pml"
 
 #define G_long	8
