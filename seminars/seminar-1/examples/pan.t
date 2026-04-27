@@ -22,47 +22,37 @@ settable(void)
 {	Trans *T;
 	Trans *settr(int, int, int, int, int, char *, int, int, int);
 
-	trans = (Trans ***) emalloc(5*sizeof(Trans **));
+	trans = (Trans ***) emalloc(4*sizeof(Trans **));
 
-	/* proctype 3: :init: */
+	/* proctype 2: :init: */
 
-	trans[3] = (Trans **) emalloc(6*sizeof(Trans *));
+	trans[2] = (Trans **) emalloc(6*sizeof(Trans *));
 
-	T = trans[ 3][4] = settr(17,2,0,0,0,"ATOMIC", 0, 2, 0);
-	T->nxt	= settr(17,2,1,0,0,"ATOMIC", 0, 2, 0);
-	trans[3][1]	= settr(14,2,2,3,3,"(run A())", 0, 2, 0);
-	trans[3][2]	= settr(15,2,3,4,4,"(run B())", 0, 2, 0);
-	trans[3][3]	= settr(16,0,5,5,5,"(run monitor())", 0, 2, 0);
-	trans[3][5]	= settr(18,0,0,6,6,"-end-", 0, 3500, 0);
+	T = trans[ 2][4] = settr(12,2,0,0,0,"ATOMIC", 0, 2, 0);
+	T->nxt	= settr(12,2,1,0,0,"ATOMIC", 0, 2, 0);
+	trans[2][1]	= settr(9,2,2,3,3,"(run P(0))", 0, 2, 0);
+	trans[2][2]	= settr(10,2,3,4,4,"(run P(1))", 0, 2, 0);
+	trans[2][3]	= settr(11,0,5,5,5,"(run monitor())", 0, 2, 0);
+	trans[2][5]	= settr(13,0,0,6,6,"-end-", 0, 3500, 0);
 
-	/* proctype 2: monitor */
+	/* proctype 1: monitor */
 
-	trans[2] = (Trans **) emalloc(3*sizeof(Trans *));
+	trans[1] = (Trans **) emalloc(3*sizeof(Trans *));
 
-	trans[2][1]	= settr(12,0,2,7,0,"assert((mutex!=2))", 1, 2, 0);
-	trans[2][2]	= settr(13,0,0,8,8,"-end-", 0, 3500, 0);
+	trans[1][1]	= settr(7,0,2,7,0,"assert((mutex!=2))", 1, 2, 0);
+	trans[1][2]	= settr(8,0,0,8,8,"-end-", 0, 3500, 0);
 
-	/* proctype 1: B */
+	/* proctype 0: P */
 
-	trans[1] = (Trans **) emalloc(7*sizeof(Trans *));
+	trans[0] = (Trans **) emalloc(8*sizeof(Trans *));
 
-	trans[1][1]	= settr(6,0,2,9,9,"y = 1", 1, 2, 0);
-	trans[1][2]	= settr(7,0,3,10,0,"((x==0))", 1, 2, 0);
-	trans[1][3]	= settr(8,0,4,11,11,"mutex = (mutex+1)", 1, 2, 0);
-	trans[1][4]	= settr(9,0,5,12,12,"mutex = (mutex-1)", 1, 2, 0);
-	trans[1][5]	= settr(10,0,6,13,13,"y = 0", 1, 2, 0);
-	trans[1][6]	= settr(11,0,0,14,14,"-end-", 0, 3500, 0);
-
-	/* proctype 0: A */
-
-	trans[0] = (Trans **) emalloc(7*sizeof(Trans *));
-
-	trans[0][1]	= settr(0,0,2,15,15,"x = 1", 1, 2, 0);
-	trans[0][2]	= settr(1,0,3,16,0,"((y==0))", 1, 2, 0);
-	trans[0][3]	= settr(2,0,4,17,17,"mutex = (mutex+1)", 1, 2, 0);
-	trans[0][4]	= settr(3,0,5,18,18,"mutex = (mutex-1)", 1, 2, 0);
-	trans[0][5]	= settr(4,0,6,19,19,"x = 0", 1, 2, 0);
-	trans[0][6]	= settr(5,0,0,20,20,"-end-", 0, 3500, 0);
+	trans[0][1]	= settr(0,0,2,9,0,"((flag!=1))", 1, 2, 0);
+	trans[0][2]	= settr(1,0,3,10,10,"flag = 1", 1, 2, 0);
+	trans[0][3]	= settr(2,0,4,11,11,"mutex = (mutex+1)", 1, 2, 0);
+	trans[0][4]	= settr(3,0,5,12,0,"printf('MSC: P(%d) has entered section.\\n',i)", 0, 2, 0);
+	trans[0][5]	= settr(4,0,6,13,13,"mutex = (mutex-1)", 1, 2, 0);
+	trans[0][6]	= settr(5,0,7,14,14,"flag = 0", 1, 2, 0);
+	trans[0][7]	= settr(6,0,0,15,15,"-end-", 0, 3500, 0);
 	/* np_ demon: */
 	trans[_NP_] = (Trans **) emalloc(3*sizeof(Trans *));
 	T = trans[_NP_][0] = settr(9997,0,1,_T5,0,"(np_)", 1,2,0);

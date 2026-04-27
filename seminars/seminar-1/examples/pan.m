@@ -20,113 +20,60 @@
 		_m = 3; goto P999;
 
 		 /* PROC :init: */
-	case 3: // STATE 1 - mutual_exclusion_wrong_2.pml:25 - [(run A())] (0:0:0 - 1)
+	case 3: // STATE 1 - mutual_exclusion_wrong.pml:18 - [(run P(0))] (0:0:0 - 1)
 		IfNotBlocked
-		reached[3][1] = 1;
-		if (!(addproc(II, 1, 0)))
+		reached[2][1] = 1;
+		if (!(addproc(II, 1, 0, 0)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 4: // STATE 2 - mutual_exclusion_wrong_2.pml:25 - [(run B())] (0:0:0 - 1)
+	case 4: // STATE 2 - mutual_exclusion_wrong.pml:18 - [(run P(1))] (0:0:0 - 1)
 		IfNotBlocked
-		reached[3][2] = 1;
-		if (!(addproc(II, 1, 1)))
+		reached[2][2] = 1;
+		if (!(addproc(II, 1, 0, 1)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 5: // STATE 3 - mutual_exclusion_wrong_2.pml:25 - [(run monitor())] (0:0:0 - 1)
+	case 5: // STATE 3 - mutual_exclusion_wrong.pml:18 - [(run monitor())] (0:0:0 - 1)
 		IfNotBlocked
-		reached[3][3] = 1;
-		if (!(addproc(II, 1, 2)))
+		reached[2][3] = 1;
+		if (!(addproc(II, 1, 1, 0)))
 			continue;
 		_m = 3; goto P999; /* 0 */
-	case 6: // STATE 5 - mutual_exclusion_wrong_2.pml:26 - [-end-] (0:0:0 - 1)
+	case 6: // STATE 5 - mutual_exclusion_wrong.pml:19 - [-end-] (0:0:0 - 1)
 		IfNotBlocked
-		reached[3][5] = 1;
+		reached[2][5] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 
 		 /* PROC monitor */
-	case 7: // STATE 1 - mutual_exclusion_wrong_2.pml:21 - [assert((mutex!=2))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[2][1] = 1;
-		spin_assert((((int)now.mutex)!=2), "(mutex!=2)", II, tt, t);
-		_m = 3; goto P999; /* 0 */
-	case 8: // STATE 2 - mutual_exclusion_wrong_2.pml:22 - [-end-] (0:0:0 - 1)
-		IfNotBlocked
-		reached[2][2] = 1;
-		if (!delproc(1, II)) continue;
-		_m = 3; goto P999; /* 0 */
-
-		 /* PROC B */
-	case 9: // STATE 1 - mutual_exclusion_wrong_2.pml:13 - [y = 1] (0:0:1 - 1)
+	case 7: // STATE 1 - mutual_exclusion_wrong.pml:14 - [assert((mutex!=2))] (0:0:0 - 1)
 		IfNotBlocked
 		reached[1][1] = 1;
-		(trpt+1)->bup.oval = ((int)now.y);
-		now.y = 1;
-#ifdef VAR_RANGES
-		logval("y", ((int)now.y));
-#endif
-		;
+		spin_assert((((int)now.mutex)!=2), "(mutex!=2)", II, tt, t);
 		_m = 3; goto P999; /* 0 */
-	case 10: // STATE 2 - mutual_exclusion_wrong_2.pml:14 - [((x==0))] (0:0:0 - 1)
+	case 8: // STATE 2 - mutual_exclusion_wrong.pml:15 - [-end-] (0:0:0 - 1)
 		IfNotBlocked
 		reached[1][2] = 1;
-		if (!((((int)now.x)==0)))
-			continue;
-		_m = 3; goto P999; /* 0 */
-	case 11: // STATE 3 - mutual_exclusion_wrong_2.pml:15 - [mutex = (mutex+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][3] = 1;
-		(trpt+1)->bup.oval = ((int)now.mutex);
-		now.mutex = (((int)now.mutex)+1);
-#ifdef VAR_RANGES
-		logval("mutex", ((int)now.mutex));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 12: // STATE 4 - mutual_exclusion_wrong_2.pml:16 - [mutex = (mutex-1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][4] = 1;
-		(trpt+1)->bup.oval = ((int)now.mutex);
-		now.mutex = (((int)now.mutex)-1);
-#ifdef VAR_RANGES
-		logval("mutex", ((int)now.mutex));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 13: // STATE 5 - mutual_exclusion_wrong_2.pml:17 - [y = 0] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][5] = 1;
-		(trpt+1)->bup.oval = ((int)now.y);
-		now.y = 0;
-#ifdef VAR_RANGES
-		logval("y", ((int)now.y));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 14: // STATE 6 - mutual_exclusion_wrong_2.pml:18 - [-end-] (0:0:0 - 1)
-		IfNotBlocked
-		reached[1][6] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 
-		 /* PROC A */
-	case 15: // STATE 1 - mutual_exclusion_wrong_2.pml:5 - [x = 1] (0:0:1 - 1)
+		 /* PROC P */
+	case 9: // STATE 1 - mutual_exclusion_wrong.pml:5 - [((flag!=1))] (0:0:0 - 1)
 		IfNotBlocked
 		reached[0][1] = 1;
-		(trpt+1)->bup.oval = ((int)now.x);
-		now.x = 1;
+		if (!((((int)now.flag)!=1)))
+			continue;
+		_m = 3; goto P999; /* 0 */
+	case 10: // STATE 2 - mutual_exclusion_wrong.pml:6 - [flag = 1] (0:0:1 - 1)
+		IfNotBlocked
+		reached[0][2] = 1;
+		(trpt+1)->bup.oval = ((int)now.flag);
+		now.flag = 1;
 #ifdef VAR_RANGES
-		logval("x", ((int)now.x));
+		logval("flag", ((int)now.flag));
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 16: // STATE 2 - mutual_exclusion_wrong_2.pml:6 - [((y==0))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[0][2] = 1;
-		if (!((((int)now.y)==0)))
-			continue;
-		_m = 3; goto P999; /* 0 */
-	case 17: // STATE 3 - mutual_exclusion_wrong_2.pml:7 - [mutex = (mutex+1)] (0:0:1 - 1)
+	case 11: // STATE 3 - mutual_exclusion_wrong.pml:7 - [mutex = (mutex+1)] (0:0:1 - 1)
 		IfNotBlocked
 		reached[0][3] = 1;
 		(trpt+1)->bup.oval = ((int)now.mutex);
@@ -136,9 +83,14 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 18: // STATE 4 - mutual_exclusion_wrong_2.pml:8 - [mutex = (mutex-1)] (0:0:1 - 1)
+	case 12: // STATE 4 - mutual_exclusion_wrong.pml:8 - [printf('MSC: P(%d) has entered section.\\n',i)] (0:0:0 - 1)
 		IfNotBlocked
 		reached[0][4] = 1;
+		Printf("MSC: P(%d) has entered section.\n", ((int)((P0 *)_this)->i));
+		_m = 3; goto P999; /* 0 */
+	case 13: // STATE 5 - mutual_exclusion_wrong.pml:9 - [mutex = (mutex-1)] (0:0:1 - 1)
+		IfNotBlocked
+		reached[0][5] = 1;
 		(trpt+1)->bup.oval = ((int)now.mutex);
 		now.mutex = (((int)now.mutex)-1);
 #ifdef VAR_RANGES
@@ -146,19 +98,19 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 19: // STATE 5 - mutual_exclusion_wrong_2.pml:9 - [x = 0] (0:0:1 - 1)
+	case 14: // STATE 6 - mutual_exclusion_wrong.pml:10 - [flag = 0] (0:0:1 - 1)
 		IfNotBlocked
-		reached[0][5] = 1;
-		(trpt+1)->bup.oval = ((int)now.x);
-		now.x = 0;
+		reached[0][6] = 1;
+		(trpt+1)->bup.oval = ((int)now.flag);
+		now.flag = 0;
 #ifdef VAR_RANGES
-		logval("x", ((int)now.x));
+		logval("flag", ((int)now.flag));
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 20: // STATE 6 - mutual_exclusion_wrong_2.pml:10 - [-end-] (0:0:0 - 1)
+	case 15: // STATE 7 - mutual_exclusion_wrong.pml:11 - [-end-] (0:0:0 - 1)
 		IfNotBlocked
-		reached[0][6] = 1;
+		reached[0][7] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 	case  _T5:	/* np_ */
