@@ -15,6 +15,8 @@ putpeg(int n, int m)
 	printf("%s:%d\n",
 		T_SRC[n].fl, T_SRC[n].ln);
 }
+#else
+#define tr_2_src(m,f,l)
 #endif
 
 void
@@ -29,30 +31,45 @@ settable(void)
 	trans[2] = (Trans **) emalloc(6*sizeof(Trans *));
 
 	T = trans[ 2][4] = settr(12,2,0,0,0,"ATOMIC", 0, 2, 0);
+		/* mutual_exclusion_wrong.pml:18 */
 	T->nxt	= settr(12,2,1,0,0,"ATOMIC", 0, 2, 0);
+		/* mutual_exclusion_wrong.pml:18 */
 	trans[2][1]	= settr(9,2,2,3,3,"(run P(0))", 0, 2, 0);
+		tr_2_src(3, "mutual_exclusion_wrong.pml", 18);
 	trans[2][2]	= settr(10,2,3,4,4,"(run P(1))", 0, 2, 0);
+		tr_2_src(4, "mutual_exclusion_wrong.pml", 18);
 	trans[2][3]	= settr(11,0,5,5,5,"(run monitor())", 0, 2, 0);
+		tr_2_src(5, "mutual_exclusion_wrong.pml", 18);
 	trans[2][5]	= settr(13,0,0,6,6,"-end-", 0, 3500, 0);
+		tr_2_src(6, "mutual_exclusion_wrong.pml", 19);
 
 	/* proctype 1: monitor */
 
 	trans[1] = (Trans **) emalloc(3*sizeof(Trans *));
 
 	trans[1][1]	= settr(7,0,2,7,0,"assert((mutex!=2))", 1, 2, 0);
+		tr_2_src(7, "mutual_exclusion_wrong.pml", 14);
 	trans[1][2]	= settr(8,0,0,8,8,"-end-", 0, 3500, 0);
+		tr_2_src(8, "mutual_exclusion_wrong.pml", 15);
 
 	/* proctype 0: P */
 
 	trans[0] = (Trans **) emalloc(8*sizeof(Trans *));
 
 	trans[0][1]	= settr(0,0,2,9,0,"((flag!=1))", 1, 2, 0);
+		tr_2_src(9, "mutual_exclusion_wrong.pml", 5);
 	trans[0][2]	= settr(1,0,3,10,10,"flag = 1", 1, 2, 0);
+		tr_2_src(10, "mutual_exclusion_wrong.pml", 6);
 	trans[0][3]	= settr(2,0,4,11,11,"mutex = (mutex+1)", 1, 2, 0);
+		tr_2_src(11, "mutual_exclusion_wrong.pml", 7);
 	trans[0][4]	= settr(3,0,5,12,0,"printf('MSC: P(%d) has entered section.\\n',i)", 0, 2, 0);
+		tr_2_src(12, "mutual_exclusion_wrong.pml", 8);
 	trans[0][5]	= settr(4,0,6,13,13,"mutex = (mutex-1)", 1, 2, 0);
+		tr_2_src(13, "mutual_exclusion_wrong.pml", 9);
 	trans[0][6]	= settr(5,0,7,14,14,"flag = 0", 1, 2, 0);
+		tr_2_src(14, "mutual_exclusion_wrong.pml", 10);
 	trans[0][7]	= settr(6,0,0,15,15,"-end-", 0, 3500, 0);
+		tr_2_src(15, "mutual_exclusion_wrong.pml", 11);
 	/* np_ demon: */
 	trans[_NP_] = (Trans **) emalloc(3*sizeof(Trans *));
 	T = trans[_NP_][0] = settr(9997,0,1,_T5,0,"(np_)", 1,2,0);

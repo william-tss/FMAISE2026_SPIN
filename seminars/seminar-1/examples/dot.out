@@ -1,0 +1,13 @@
+digraph p_P {
+size="8,10";
+  GT [shape=box,style=dotted,label="P"];
+  GT -> S1;
+	S1 -> S2  [color=black,style=bold,label="((flag!=1))"];
+	S2 -> S3  [color=black,style=bold,label="flag = 1"];
+	S3 -> S4  [color=black,style=bold,label="mutex = (mutex+1)"];
+	S4 -> S5  [color=black,style=solid,label="printf('MSC: P(%d) has entered section. ',i)"];
+	S5 -> S6  [color=black,style=bold,label="mutex = (mutex-1)"];
+	S6 -> S7  [color=black,style=bold,label="flag = 0"];
+	S7 -> S0  [color=black,style=solid,label="-end-"];
+  S7 [color=blue,style=bold,shape=box];
+}
