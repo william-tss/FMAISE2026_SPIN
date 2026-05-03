@@ -24,52 +24,177 @@ settable(void)
 {	Trans *T;
 	Trans *settr(int, int, int, int, int, char *, int, int, int);
 
-	trans = (Trans ***) emalloc(4*sizeof(Trans **));
+	trans = (Trans ***) emalloc(2*sizeof(Trans **));
 
-	/* proctype 2: :init: */
+	/* proctype 0: TSP */
 
-	trans[2] = (Trans **) emalloc(6*sizeof(Trans *));
+	trans[0] = (Trans **) emalloc(75*sizeof(Trans *));
 
-	T = trans[ 2][4] = settr(12,2,0,0,0,"ATOMIC", 0, 2, 0);
-		/* mutual_exclusion_wrong.pml:18 */
-	T->nxt	= settr(12,2,1,0,0,"ATOMIC", 0, 2, 0);
-		/* mutual_exclusion_wrong.pml:18 */
-	trans[2][1]	= settr(9,2,2,3,3,"(run P(0))", 0, 2, 0);
-		tr_2_src(3, "mutual_exclusion_wrong.pml", 18);
-	trans[2][2]	= settr(10,2,3,4,4,"(run P(1))", 0, 2, 0);
-		tr_2_src(4, "mutual_exclusion_wrong.pml", 18);
-	trans[2][3]	= settr(11,0,5,5,5,"(run monitor())", 0, 2, 0);
-		tr_2_src(5, "mutual_exclusion_wrong.pml", 18);
-	trans[2][5]	= settr(13,0,0,6,6,"-end-", 0, 3500, 0);
-		tr_2_src(6, "mutual_exclusion_wrong.pml", 19);
-
-	/* proctype 1: monitor */
-
-	trans[1] = (Trans **) emalloc(3*sizeof(Trans *));
-
-	trans[1][1]	= settr(7,0,2,7,0,"assert((mutex!=2))", 1, 2, 0);
-		tr_2_src(7, "mutual_exclusion_wrong.pml", 14);
-	trans[1][2]	= settr(8,0,0,8,8,"-end-", 0, 3500, 0);
-		tr_2_src(8, "mutual_exclusion_wrong.pml", 15);
-
-	/* proctype 0: P */
-
-	trans[0] = (Trans **) emalloc(8*sizeof(Trans *));
-
-	trans[0][1]	= settr(0,0,2,9,0,"((flag!=1))", 1, 2, 0);
-		tr_2_src(9, "mutual_exclusion_wrong.pml", 5);
-	trans[0][2]	= settr(1,0,3,10,10,"flag = 1", 1, 2, 0);
-		tr_2_src(10, "mutual_exclusion_wrong.pml", 6);
-	trans[0][3]	= settr(2,0,4,11,11,"mutex = (mutex+1)", 1, 2, 0);
-		tr_2_src(11, "mutual_exclusion_wrong.pml", 7);
-	trans[0][4]	= settr(3,0,5,12,0,"printf('MSC: P(%d) has entered section.\\n',i)", 0, 2, 0);
-		tr_2_src(12, "mutual_exclusion_wrong.pml", 8);
-	trans[0][5]	= settr(4,0,6,13,13,"mutex = (mutex-1)", 1, 2, 0);
-		tr_2_src(13, "mutual_exclusion_wrong.pml", 9);
-	trans[0][6]	= settr(5,0,7,14,14,"flag = 0", 1, 2, 0);
-		tr_2_src(14, "mutual_exclusion_wrong.pml", 10);
-	trans[0][7]	= settr(6,0,0,15,15,"-end-", 0, 3500, 0);
-		tr_2_src(15, "mutual_exclusion_wrong.pml", 11);
+	trans[0][1]	= settr(0,0,18,3,3,"vv[0] = 1", 1, 2, 0);
+		tr_2_src(3, "tsp4_optimized.pml", 20);
+	T = trans[ 0][18] = settr(17,2,0,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:22 */
+	T->nxt	= settr(17,2,5,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:22 */
+	T = trans[0][5] = settr(4,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:28 */
+	T = T->nxt	= settr(4,2,2,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:28 */
+	    T->nxt	= settr(4,2,4,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:28 */
+	trans[0][2]	= settr(1,2,3,4,0,"({c_code1})", 1, 2, 0);
+		tr_2_src(4, "tsp4_optimized.pml", 29);
+	trans[0][3]	= settr(2,0,73,1,0,"goto end", 1, 2, 0);
+	trans[0][6]	= settr(5,2,16,1,0,".(goto)", 1, 2, 0);
+	trans[0][4]	= settr(3,2,16,2,0,"else", 1, 2, 0);
+	T = trans[0][16] = settr(15,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:33 */
+	T = T->nxt	= settr(15,2,7,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:33 */
+	T = T->nxt	= settr(15,2,10,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:33 */
+	    T->nxt	= settr(15,2,13,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:33 */
+	trans[0][7]	= settr(6,2,8,5,0,"(!(vv[1]))", 1, 2, 0);
+		tr_2_src(5, "tsp4_optimized.pml", 34);
+	trans[0][8]	= settr(7,2,9,6,6,"cost = (cost+7)", 1, 2, 0);
+		tr_2_src(6, "tsp4_optimized.pml", 34);
+	trans[0][9]	= settr(8,0,36,1,0,"goto P1", 1, 2, 0);
+	trans[0][17]	= settr(16,0,36,1,0,".(goto)", 1, 2, 0);
+	trans[0][10]	= settr(9,2,11,7,0,"(!(vv[2]))", 1, 2, 0);
+		tr_2_src(7, "tsp4_optimized.pml", 35);
+	trans[0][11]	= settr(10,2,12,8,8,"cost = (cost+9)", 1, 2, 0);
+		tr_2_src(8, "tsp4_optimized.pml", 35);
+	trans[0][12]	= settr(11,0,54,1,0,"goto P2", 1, 2, 0);
+	trans[0][13]	= settr(12,2,14,9,0,"(!(vv[3]))", 1, 2, 0);
+		tr_2_src(9, "tsp4_optimized.pml", 36);
+	trans[0][14]	= settr(13,2,15,10,10,"cost = (cost+2)", 1, 2, 0);
+		tr_2_src(10, "tsp4_optimized.pml", 36);
+	trans[0][15]	= settr(14,0,72,1,0,"goto P3", 1, 2, 0);
+	T = trans[ 0][36] = settr(35,2,0,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:40 */
+	T->nxt	= settr(35,2,19,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:40 */
+	trans[0][19]	= settr(18,2,23,11,11,"vv[1] = 1", 1, 2, 0);
+		tr_2_src(11, "tsp4_optimized.pml", 41);
+	T = trans[0][23] = settr(22,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:44 */
+	T = T->nxt	= settr(22,2,20,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:44 */
+	    T->nxt	= settr(22,2,22,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:44 */
+	trans[0][20]	= settr(19,2,21,12,0,"({c_code2})", 1, 2, 0);
+		tr_2_src(12, "tsp4_optimized.pml", 45);
+	trans[0][21]	= settr(20,0,73,1,0,"goto end", 1, 2, 0);
+	trans[0][24]	= settr(23,2,34,1,0,".(goto)", 1, 2, 0);
+	trans[0][22]	= settr(21,2,34,2,0,"else", 1, 2, 0);
+	T = trans[0][34] = settr(33,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:49 */
+	T = T->nxt	= settr(33,2,25,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:49 */
+	T = T->nxt	= settr(33,2,28,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:49 */
+	    T->nxt	= settr(33,2,31,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:49 */
+	trans[0][25]	= settr(24,2,26,13,0,"(!(vv[2]))", 1, 2, 0);
+		tr_2_src(13, "tsp4_optimized.pml", 50);
+	trans[0][26]	= settr(25,2,27,14,14,"cost = (cost+3)", 1, 2, 0);
+		tr_2_src(14, "tsp4_optimized.pml", 50);
+	trans[0][27]	= settr(26,0,54,1,0,"goto P2", 1, 2, 0);
+	trans[0][35]	= settr(34,0,54,1,0,".(goto)", 1, 2, 0);
+	trans[0][28]	= settr(27,2,29,15,0,"(!(vv[3]))", 1, 2, 0);
+		tr_2_src(15, "tsp4_optimized.pml", 51);
+	trans[0][29]	= settr(28,2,30,16,16,"cost = (cost+7)", 1, 2, 0);
+		tr_2_src(16, "tsp4_optimized.pml", 51);
+	trans[0][30]	= settr(29,0,72,1,0,"goto P3", 1, 2, 0);
+	trans[0][31]	= settr(30,2,32,2,0,"else", 1, 2, 0);
+	trans[0][32]	= settr(31,2,33,17,17,"cost = (cost+4)", 1, 2, 0);
+		tr_2_src(17, "tsp4_optimized.pml", 52);
+	trans[0][33]	= settr(32,0,73,1,0,"goto end", 1, 2, 0);
+	T = trans[ 0][54] = settr(53,2,0,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:56 */
+	T->nxt	= settr(53,2,37,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:56 */
+	trans[0][37]	= settr(36,2,41,18,18,"vv[2] = 1", 1, 2, 0);
+		tr_2_src(18, "tsp4_optimized.pml", 57);
+	T = trans[0][41] = settr(40,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:60 */
+	T = T->nxt	= settr(40,2,38,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:60 */
+	    T->nxt	= settr(40,2,40,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:60 */
+	trans[0][38]	= settr(37,2,39,19,0,"({c_code3})", 1, 2, 0);
+		tr_2_src(19, "tsp4_optimized.pml", 61);
+	trans[0][39]	= settr(38,0,73,1,0,"goto end", 1, 2, 0);
+	trans[0][42]	= settr(41,2,52,1,0,".(goto)", 1, 2, 0);
+	trans[0][40]	= settr(39,2,52,2,0,"else", 1, 2, 0);
+	T = trans[0][52] = settr(51,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:65 */
+	T = T->nxt	= settr(51,2,43,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:65 */
+	T = T->nxt	= settr(51,2,46,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:65 */
+	    T->nxt	= settr(51,2,49,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:65 */
+	trans[0][43]	= settr(42,2,44,20,0,"(!(vv[1]))", 1, 2, 0);
+		tr_2_src(20, "tsp4_optimized.pml", 66);
+	trans[0][44]	= settr(43,2,45,21,21,"cost = (cost+7)", 1, 2, 0);
+		tr_2_src(21, "tsp4_optimized.pml", 66);
+	trans[0][45]	= settr(44,0,36,1,0,"goto P1", 1, 2, 0);
+	trans[0][53]	= settr(52,0,72,1,0,".(goto)", 1, 2, 0);
+	trans[0][46]	= settr(45,2,47,22,0,"(!(vv[3]))", 1, 2, 0);
+		tr_2_src(22, "tsp4_optimized.pml", 67);
+	trans[0][47]	= settr(46,2,48,23,23,"cost = (cost+8)", 1, 2, 0);
+		tr_2_src(23, "tsp4_optimized.pml", 67);
+	trans[0][48]	= settr(47,0,72,1,0,"goto P3", 1, 2, 0);
+	trans[0][49]	= settr(48,2,50,2,0,"else", 1, 2, 0);
+	trans[0][50]	= settr(49,2,51,24,24,"cost = (cost+6)", 1, 2, 0);
+		tr_2_src(24, "tsp4_optimized.pml", 68);
+	trans[0][51]	= settr(50,0,73,1,0,"goto end", 1, 2, 0);
+	T = trans[ 0][72] = settr(71,2,0,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:72 */
+	T->nxt	= settr(71,2,55,0,0,"ATOMIC", 1, 2, 0);
+		/* tsp4_optimized.pml:72 */
+	trans[0][55]	= settr(54,2,59,25,25,"vv[3] = 1", 1, 2, 0);
+		tr_2_src(25, "tsp4_optimized.pml", 73);
+	T = trans[0][59] = settr(58,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:76 */
+	T = T->nxt	= settr(58,2,56,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:76 */
+	    T->nxt	= settr(58,2,58,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:76 */
+	trans[0][56]	= settr(55,2,57,26,0,"({c_code4})", 1, 2, 0);
+		tr_2_src(26, "tsp4_optimized.pml", 77);
+	trans[0][57]	= settr(56,0,73,1,0,"goto end", 1, 2, 0);
+	trans[0][60]	= settr(59,2,70,1,0,".(goto)", 1, 2, 0);
+	trans[0][58]	= settr(57,2,70,2,0,"else", 1, 2, 0);
+	T = trans[0][70] = settr(69,2,0,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:81 */
+	T = T->nxt	= settr(69,2,61,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:81 */
+	T = T->nxt	= settr(69,2,64,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:81 */
+	    T->nxt	= settr(69,2,67,0,0,"IF", 1, 2, 0);
+		/* tsp4_optimized.pml:81 */
+	trans[0][61]	= settr(60,2,62,27,0,"(!(vv[1]))", 1, 2, 0);
+		tr_2_src(27, "tsp4_optimized.pml", 82);
+	trans[0][62]	= settr(61,2,63,28,28,"cost = (cost+3)", 1, 2, 0);
+		tr_2_src(28, "tsp4_optimized.pml", 82);
+	trans[0][63]	= settr(62,0,36,1,0,"goto P1", 1, 2, 0);
+	trans[0][71]	= settr(70,0,73,1,0,".(goto)", 1, 2, 0);
+	trans[0][64]	= settr(63,2,65,29,0,"(!(vv[2]))", 1, 2, 0);
+		tr_2_src(29, "tsp4_optimized.pml", 83);
+	trans[0][65]	= settr(64,2,66,30,30,"cost = (cost+8)", 1, 2, 0);
+		tr_2_src(30, "tsp4_optimized.pml", 83);
+	trans[0][66]	= settr(65,0,54,1,0,"goto P2", 1, 2, 0);
+	trans[0][67]	= settr(66,2,68,2,0,"else", 1, 2, 0);
+	trans[0][68]	= settr(67,2,69,31,31,"cost = (cost+2)", 1, 2, 0);
+		tr_2_src(31, "tsp4_optimized.pml", 84);
+	trans[0][69]	= settr(68,0,73,1,0,"goto end", 1, 2, 0);
+	trans[0][73]	= settr(72,0,74,32,32,"{c_code5}", 1, 2, 0);
+		tr_2_src(32, "tsp4_optimized.pml", 94);
+	trans[0][74]	= settr(73,0,0,33,33,"-end-", 0, 3500, 0);
+		tr_2_src(33, "tsp4_optimized.pml", 108);
 	/* np_ demon: */
 	trans[_NP_] = (Trans **) emalloc(3*sizeof(Trans *));
 	T = trans[_NP_][0] = settr(9997,0,1,_T5,0,"(np_)", 1,2,0);

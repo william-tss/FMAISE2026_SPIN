@@ -1,0 +1,7 @@
+never check_opt {    /* !(<> ((cost>=1000))) */
+accept_init:
+T0_init:
+	do
+	:: (! (((cost>=1000)))) -> goto T0_init
+	od;
+}
