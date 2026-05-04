@@ -183,3 +183,10 @@ size="8,10";
 	S21 -> S22  [color=black,style=dashed,label="cost = (cost+6)"];
 	S22 -> S200  [color=black,style=solid,label="goto P7"];
 }
+digraph claim_check_opt {
+size="8,10";
+  GT [shape=box,style=dotted,label="check_opt"];
+  GT -> S3;
+	S3 -> S3  [color=black,style=solid,label="(!((cost>=1000)))"];
+  S3 [color=red,style=bold];
+}
