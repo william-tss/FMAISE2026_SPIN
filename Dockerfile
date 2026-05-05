@@ -1,43 +1,40 @@
-FROM ubuntu:24.04
+# Usa un'immagine Python leggera come base
+FROM python:3.11-slim
 
-ENV DEBIAN_FRONTEND=noninteractive
+# Evita che Python generi file .pyc e forza l'output in tempo reale
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# 1. Installazione dipendenze di sistema
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    python3-venv \
-    libedit2 \
-    wget \
-    unzip \
+# Installiamo le dipendenze di sistema necessarie per compilare SPIN
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    make \
+    yacc \
+    flex \
+    bison \
+    curl \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Configurazione NuSMV
-COPY ./modelchecker-dir /opt/nusmv
-ENV PATH="/opt/nusmv/NuSMV-2.7.1-linux64/bin:${PATH}"
+# Scarichiamo e compiliamo SPIN (versione 6.5.1 come esempio)
+WORKDIR /opt
+RUN curl -L https://github.com/nimble-code/Spin/archive/refs/tags/version-6.5.1.tar.gz -o spin.tar.gz \
+    && tar -xvzf spin.tar.gz \
+    && cd Spin-version-6.5.1/Src \
+    && make \
+    && cp spin /usr/local/bin/ \
+    && cd /opt && rm -rf spin.tar.gz Spin-version-6.5.1
 
-# Se NuSMV dovesse darti errore di "libedit.so.0 non trovato", 
-# questa riga (con '|| true' per evitare blocchi) risolve il problema su Ubuntu 24.04
-RUN ln -s /usr/lib/x86_64-linux-gnu/libedit.so.2 /usr/lib/x86_64-linux-gnu/libedit.so.0 || true
+# Impostiamo la cartella di lavoro per il tuo progetto
+WORKDIR /app
 
-# 3. Creazione e "Attivazione" del Virtual Environment
-ENV VIRTUAL_ENV=/opt/venv
-RUN python3 -m venv $VIRTUAL_ENV
+# Copiamo il file dei requisiti e installiamo le dipendenze Python
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Aggiungendo la cartella 'bin' del venv al PATH, pip e python useranno sempre il venv!
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# Copiamo il resto del tuo codice nel container
+COPY . .
 
-# 4. Installazione pacchetti Python (ora andrà a buon fine nel venv)
-RUN pip3 install --no-cache-dir \
-    notebook \
-    jupyterlab \
-    jupyterlab-rise
-
-# 5. Configurazione Workspace
-WORKDIR /workspace
-COPY . /workspace
-
-EXPOSE 8888
-
-# 6. Avvio (JupyterLab troverà l'eseguibile grazie al PATH modificato)
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+# Comando di default (puoi cambiarlo con il tuo script principale)
+CMD ["spin", "--version"]

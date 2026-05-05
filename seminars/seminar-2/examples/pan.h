@@ -2,7 +2,7 @@
 #define PAN_H
 
 #define SpinVersion	"Spin Version 6.5.1 -- 20 December 2019"
-#define PanSource	"tsp8.pml"
+#define PanSource	"tsp4.pml"
 
 #define G_long	8
 #define G_int	4
@@ -107,6 +107,7 @@
 #if defined(RANDSTORE) && !defined(RANDSTOR)
 	#define RANDSTOR	RANDSTORE
 #endif
+#define MERGED	1
 #if !defined(HAS_LAST) && defined(BCS)
 	#define HAS_LAST	1 /* use it, but */
 	#ifndef STORE_LAST
@@ -139,14 +140,14 @@ typedef struct S_F_MAP {
 } S_F_MAP;
 
 #define _nstates1	7	/* check_opt */
-#define minseq1	202
-#define maxseq1	207
+#define minseq1	54
+#define maxseq1	59
 #define _endstate1	6
 
-#define _nstates0	203	/* TSP */
+#define _nstates0	55	/* TSP */
 #define minseq0	0
-#define maxseq0	201
-#define _endstate0	202
+#define maxseq0	53
+#define _endstate0	54
 
 extern short src_ln1[];
 extern short src_ln0[];
@@ -154,8 +155,8 @@ extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned char
-#define _T5	120
-#define _T2	121
+#define _T5	23
+#define _T2	24
 #define WS		8 /* word size in bytes */
 #define SYNC	0
 #define ASYNC	0
@@ -173,7 +174,7 @@ extern S_F_MAP src_file0[];
 typedef struct P1 { /* check_opt */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 9; /* state    */
+	unsigned _p   : 7; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -184,7 +185,7 @@ typedef struct P1 { /* check_opt */
 typedef struct P0 { /* TSP */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 9; /* state    */
+	unsigned _p   : 7; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -194,7 +195,7 @@ typedef struct P0 { /* TSP */
 typedef struct P2 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 9; /* state    */
+	unsigned _p   : 7; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -391,7 +392,7 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
-	uchar vv[8];
+	uchar vv[4];
 	int cost;
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
@@ -783,7 +784,7 @@ void qsend(int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	122
+#define NTRANS	25
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);
