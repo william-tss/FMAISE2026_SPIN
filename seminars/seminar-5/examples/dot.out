@@ -1,0 +1,19 @@
+digraph p_node {
+size="8,10";
+  GT [shape=box,style=dotted,label="node"];
+  GT -> S1;
+	S1 -> S19  [color=black,style=bold,label="q[next_chan]!election,my_id"];
+	S19 -> S11  [color=black,style=bold,label="q[my_pos]?election,neighbor_id"];
+	S19 -> S16  [color=black,style=bold,label="q[my_pos]?winner,neighbor_id"];
+	S11 -> S4  [color=black,style=solid,label="((neighbor_id==my_id))"];
+	S11 -> S8  [color=black,style=solid,label="((neighbor_id>my_id))"];
+	S11 -> S10  [color=black,style=solid,label="((neighbor_id<my_id))"];
+	S4 -> S5  [color=black,style=bold,label="nr_leaders = (nr_leaders+1)"];
+	S5 -> S22  [color=black,style=bold,label="q[next_chan]!winner,my_id"];
+	S22 -> S0  [color=black,style=solid,label="-end-"];
+  S22 [color=blue,style=bold,shape=box];
+	S8 -> S19  [color=black,style=bold,label="q[next_chan]!election,neighbor_id"];
+	S10 -> S19  [color=black,style=solid,label="(1)"];
+	S16 -> S15  [color=black,style=solid,label="((neighbor_id!=my_id))"];
+	S15 -> S22  [color=black,style=bold,label="q[next_chan]!winner,neighbor_id"];
+}

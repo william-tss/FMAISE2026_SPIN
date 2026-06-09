@@ -1,0 +1,45 @@
+Depth=     248 States=    1e+06 Transitions= 1.87e+06 Memory=   166.815	t=     0.33 R=   3e+06
+Depth=     248 States=    2e+06 Transitions= 3.83e+06 Memory=   204.999	t=     0.67 R=   3e+06
+Depth=     248 States=    3e+06 Transitions= 5.78e+06 Memory=   243.085	t=     1.02 R=   3e+06
+Depth=     248 States=    4e+06 Transitions=  7.8e+06 Memory=   281.269	t=     1.39 R=   3e+06
+Depth=     248 States=    5e+06 Transitions= 9.92e+06 Memory=   319.452	t=     1.78 R=   3e+06
+Depth=     248 States=    6e+06 Transitions= 1.19e+07 Memory=   357.538	t=     2.17 R=   3e+06
+Depth=     248 States=    7e+06 Transitions=  1.4e+07 Memory=   395.722	t=     2.57 R=   3e+06
+Depth=     248 States=    8e+06 Transitions= 1.63e+07 Memory=   433.905	t=     3.03 R=   3e+06
+Depth=     248 States=    9e+06 Transitions= 1.83e+07 Memory=   471.991	t=     3.45 R=   3e+06
+pan: reached -DMEMLIM bound
+	5.24205e+08 bytes used
+	102400 bytes more needed
+	5.24288e+08 bytes limit
+hint: to reduce memory, recompile with
+  -DBITSTATE # supertrace, approximation
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Hash-Compact 4 search for:
+	never claim         	- (none specified)
+	assertion violations	+
+	acceptance   cycles 	- (not selected)
+	invalid end states	+
+
+State-vector 352 byte, depth reached 248, errors: 0
+  9733092 states, stored
+ 10122069 states, matched
+ 19855161 transitions (= stored+matched)
+       31 atomic steps
+hash conflicts:   1829719 (resolved)
+
+Stats on memory usage (in Megabytes):
+ 3527.236	equivalent memory usage for states (stored*(State-vector + overhead))
+  371.480	actual memory usage for states (compression: 10.53%)
+         	state-vector as stored = 12 byte + 28 byte overhead
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  499.921	total actual memory usage
+
+
+
+pan: elapsed time 3.78 seconds
+pan: rate 2574892.1 states/second
