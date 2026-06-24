@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMI SCADA - Batch Plant PLC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: ui-sans-serif, system-ui, sans-serif; }
+        .tank-bg { fill: #1e293b; stroke: #64748b; stroke-width: 3; }
+        .pipe { fill: none; stroke: #475569; stroke-width: 4; stroke-linejoin: round; }
+        .fluid { transition: all 0.5s ease-in-out; }
+        /* Chemical states colors */
+        .color-empty { fill: transparent; }
+        .color-sol42C { fill: #9ca3af; } /* Cold Salt: Gray */
+        .color-water28C { fill: #3b82f6; } /* Cold Water: Blue */
+        .color-sol70C { fill: #8b5cf6; } /* Mix: Purple */
+        .color-sol42H { fill: #ef4444; } /* Hot Salt: Red */
+        .color-water28H { fill: #f97316; } /* Hot Water (Steam): Orange */
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-8">
+
+    <div class="w-full max-w-4xl flex flex-col gap-6 mb-8 px-4">
+        <div class="flex justify-between items-end border-b border-slate-700 pb-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-100">SCADA Panel: Batch Plant</h1>
+                <p class="text-slate-400 mt-1">Discrete State Machine Simulation (Promela Model)</p>
+            </div>
+            <div class="flex gap-4">
+                <button id="btn-reset" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded font-medium transition-colors">
+                    Reset Plant
+                </button>
+                <button id="btn-step" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded font-bold transition-colors shadow-lg shadow-blue-900/50">
+                    Step PLC Cycle
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-slate-800 border border-slate-600 rounded-lg p-6">
+            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Current Controller State</h2>
+            <div id="status-text" class="text-xl font-mono text-emerald-400">
+                Initializing...
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 overflow-hidden relative">
+        <svg width="850" height="750" viewBox="0 0 850 750" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+                </marker>
+            </defs>
+
+            <path class="pipe" d="M 200 150 L 200 175 L 400 175 L 400 195" marker-end="url(#arrow)" />
+            <path class="pipe" d="M 600 150 L 600 175 L 400 175" />
+            <path class="pipe" d="M 400 300 L 400 345" marker-end="url(#arrow)" />
+            <path class="pipe" d="M 400 450 L 400 495" marker-end="url(#arrow)" />
+            <path class="pipe" d="M 380 600 L 380 625 L 200 625 L 200 645" marker-end="url(#arrow)" />
+            <path class="pipe" d="M 420 600 L 420 625 L 600 625 L 600 645" marker-end="url(#arrow)" />
+            <path class="pipe" d="M 160 700 L 80 700 L 80 20 L 200 20 L 200 45" marker-end="url(#arrow)" stroke-dasharray="8,4" />
+            <path class="pipe" d="M 640 700 L 720 700 L 720 20 L 600 20 L 600 45" marker-end="url(#arrow)" stroke-dasharray="8,4" />
+
+            <g transform="translate(160, 50)">
+                <rect class="tank-bg" width="80" height="100" rx="10" />
+                <rect id="fluid-B1" class="fluid color-sol42C" x="5" y="10" width="70" height="85" rx="5" />
+                <text x="40" y="-10" fill="#cbd5e1" font-size="14" text-anchor="middle" font-weight="bold">B1 (Salt)</text>
+            </g>
+            <g transform="translate(560, 50)">
+                <rect class="tank-bg" width="80" height="100" rx="10" />
+                <rect id="fluid-B2" class="fluid color-water28C" x="5" y="10" width="70" height="85" rx="5" />
+                <text x="40" y="-10" fill="#cbd5e1" font-size="14" text-anchor="middle" font-weight="bold">B2 (Water)</text>
+            </g>
+            <g transform="translate(360, 200)">
+                <rect class="tank-bg" width="80" height="100" rx="10" />
+                <rect id="fluid-B3" class="fluid color-empty" x="5" y="95" width="70" height="0" rx="5" />
+                <text x="40" y="-10" fill="#cbd5e1" font-size="14" text-anchor="middle" font-weight="bold">B3 (Mixer)</text>
+            </g>
+            <g transform="translate(360, 350)">
+                <rect class="tank-bg" width="80" height="100" rx="10" />
+                <rect id="fluid-B4" class="fluid color-empty" x="5" y="95" width="70" height="0" rx="5" />
+                <text x="40" y="-10" fill="#cbd5e1" font-size="14" text-anchor="middle" font-weight="bold">B4</text>
+            </g>
+            <g transform="translate(360, 500)">
+                <rect class="tank-bg" width="80" height="100" rx="10" />
+                <rect id="fluid-B5" class="fluid color-empty" x="5" y="95" width="70" height="0" rx="5" />
+                <text x="40" y="-10" fill="#cbd5e1" font-size="14" text-anchor="middle" font-weight="bold">B5 (Heater)</text>
+            </g>
+            <g transform="translate(160, 650)">
+                <rect class="tank-bg" width="80" height="100" rx="10" />
+                <rect id="fluid-B7" class="fluid color-empty" x="5" y="95" width="70" height="0" rx="5" />
+                <text x="40" y="-10" fill="#cbd5e1" font-size="14" text-anchor="middle" font-weight="bold">B7 (Salt Cool.)</text>
+            </g>
+            <g transform="translate(560, 650)">
+                <rect class="tank-bg" width="80" height="100" rx="10" />
+                <rect id="fluid-B6" class="fluid color-empty" x="5" y="95" width="70" height="0" rx="5" />
+                <text x="40" y="-10" fill="#cbd5e1" font-size="14" text-anchor="middle" font-weight="bold">B6 (Water Cool.)</text>
+            </g>
+        </svg>
+
+        <div class="absolute top-6 right-6 bg-slate-800 border border-slate-700 p-3 rounded text-xs flex flex-col gap-2 shadow-lg z-10">
+            <div class="font-bold text-slate-300 border-b border-slate-600 pb-1 mb-1">Legend</div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-[#9ca3af]"></div> Cold Salt</div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-[#3b82f6]"></div> Cold Water</div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-[#8b5cf6]"></div> Solution (Mix)</div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-[#ef4444]"></div> Hot Salt</div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-[#f97316]"></div> Hot Water (Steam)</div>
+        </div>
+    </div>
+
+    <script>
+        // State machine derived from SPIN model
+        const sequence = [
+            { 
+                step: 0, 
+                desc: "[STEP 0] Initialization: B1 and B2 loaded.", 
+                tanks: { B1: 'sol42C', B2: 'water28C', B3: 'empty', B4: 'empty', B5: 'empty', B6: 'empty', B7: 'empty' }
+            },
+            { 
+                step: 1, 
+                desc: "[STEP 1] B1toB3 & B2toB3: Valves V8 and V9 open. Mixing in progress in B3.", 
+                tanks: { B1: 'empty', B2: 'empty', B3: 'sol70C', B4: 'empty', B5: 'empty', B6: 'empty', B7: 'empty' }
+            },
+            { 
+                step: 2, 
+                desc: "[STEP 2] B3toB4: Valve V11 open. Solution transfer to B4.", 
+                tanks: { B1: 'empty', B2: 'empty', B3: 'empty', B4: 'sol70C', B5: 'empty', B6: 'empty', B7: 'empty' }
+            },
+            { 
+                step: 3, 
+                desc: "[STEP 3] B4toB5: Valve V12 open. Transfer to reactor B5.", 
+                tanks: { B1: 'empty', B2: 'empty', B3: 'empty', B4: 'empty', B5: 'sol70C', B6: 'empty', B7: 'empty' }
+            },
+            { 
+                step: 4, 
+                desc: "[STEP 4] Heat5: Heating B5. Instant evaporation of hot water to B6.", 
+                tanks: { B1: 'empty', B2: 'empty', B3: 'empty', B4: 'empty', B5: 'sol42H', B6: 'water28H', B7: 'empty' }
+            },
+            { 
+                step: 5, 
+                desc: "[STEP 5] B5toB7: Valve V15 open. Hot solution transfer to B7.", 
+                tanks: { B1: 'empty', B2: 'empty', B3: 'empty', B4: 'empty', B5: 'empty', B6: 'water28H', B7: 'sol42H' }
+            },
+            { 
+                step: 6, 
+                desc: "[STEP 6] Cool6 & Cool7: Valves V17 and V29 open. Liquids cooling in progress.", 
+                tanks: { B1: 'empty', B2: 'empty', B3: 'empty', B4: 'empty', B5: 'empty', B6: 'water28C', B7: 'sol42C' }
+            },
+            { 
+                step: 7, 
+                desc: "[STEP 7] Pump1 & Pump2: Pumps active. Material recycled to source tanks.", 
+                tanks: { B1: 'sol42C', B2: 'water28C', B3: 'empty', B4: 'empty', B5: 'empty', B6: 'empty', B7: 'empty' }
+            }
+        ];
+
+        let currentStep = 0;
+
+        const updateUI = () => {
+            const state = sequence[currentStep];
+            
+            // Update status text
+            document.getElementById('status-text').innerText = state.desc;
+
+            // Update fluids visually
+            Object.entries(state.tanks).forEach(([tankId, chemicalState]) => {
+                const fluidRect = document.getElementById(`fluid-${tankId}`);
+                
+                // Remove previous color classes
+                fluidRect.className.baseVal = fluidRect.className.baseVal.replace(/color-\w+/g, '').trim();
+                
+                // Apply new state
+                if (chemicalState === 'empty') {
+                    fluidRect.setAttribute('y', '95');
+                    fluidRect.setAttribute('height', '0');
+                    fluidRect.classList.add('color-empty', 'fluid');
+                } else {
+                    fluidRect.setAttribute('y', '10');
+                    fluidRect.setAttribute('height', '85');
+                    fluidRect.classList.add(`color-${chemicalState}`, 'fluid');
+                }
+            });
+        };
+
+        // Event Listeners
+        document.getElementById('btn-step').addEventListener('click', () => {
+            currentStep = (currentStep + 1) % sequence.length;
+            updateUI();
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            currentStep = 0;
+            updateUI();
+        });
+
+        // Initialize on load
+        updateUI();
+    </script>
+</body>
+</html>
