@@ -11,7 +11,7 @@ bool	px[13] ;
 mtype	B1, B2, B3, B4, B5, B6, B7 ;
 short	time, tB1B3, tB2B3, tB3B4, tB4B5, tB5B7 ;
 short	tH, tC6, tC7, tP1, tP2 ;
-short 	batches
+short 	batches ;
 #define true		1
 #define false		0
 #define up(x)		x=1

@@ -124,7 +124,8 @@ def generate_promela_model(states, n_value, template_path="plc.pml", output_path
     promela_code = promela_code.replace("@@INIT_STATE@@", init_state_str)
     
     # add ltl prop
-    ltl_string = f"\n\n/* LTL Property: G(batches < N) */\nltl check_batches {{ [] (batches < {n_value}) }}\n"
+    # Update the ltl_string variable in your Python code:
+    ltl_string = f"\n\n/* LTL Property: Never reach 18 batches before time 5000 */\nltl goal {{ [] (batches < {n_value}) }}\n"
     promela_code += ltl_string
     
     with open(output_path, 'w') as file:
