@@ -2,8 +2,8 @@ import sys
 import subprocess
 import os
 
-# Define the strictly valid states for each tank based on the Promela process logic
-VALID_STATES = {
+# this is from like phi in paper - basically predicates that promela model checks 
+VALID_STATES = { 
     "B1": ["cempty", "sol42C", "sol84C"],
     "B2": ["cempty", "water28C", "water56C"],
     "B3": ["cempty", "sol42C", "water28C", "sol70C"],
@@ -13,7 +13,7 @@ VALID_STATES = {
     "B7": ["cempty", "sol42C", "sol84C", "sol42H", "sol84H"]
 }
 
-# Define pre-selected configurations (Presets)
+# 
 PRESETS = {
     "1": {
         "name": "Default (Paper Configuration)",
@@ -53,12 +53,9 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def get_user_choice():
-    """Displays an interactive menu and captures the user's choice."""
     while True:
         clear_screen()
-        print("=========================================================")
-        print("      PLC Schedule Verification - Configuration Menu     ")
-        print("=========================================================\n")
+        print("Choose initial configuration for the 7 tanks:\n")
         
         for key, preset in PRESETS.items():
             print(f"  [{key}] {preset['name']}")
@@ -66,15 +63,11 @@ def get_user_choice():
             
         print("  [5] Custom Tank Configuration")
         print("      - Manually enter the state for each of the 7 tanks.\n")
-        print("  [0] Exit")
-        print("=========================================================")
-        
+    
         choice = input("\nEnter your choice (0-5): ").strip()
         
-        if choice == '0':
-            print("Exiting...")
-            sys.exit(0)
-        elif choice in PRESETS:
+
+        if choice in PRESETS:
             return PRESETS[choice]["states"]
         elif choice == '5':
             return get_custom_config()
@@ -82,11 +75,9 @@ def get_user_choice():
             input("Invalid choice. Press Enter to try again...")
 
 def get_custom_config():
-    """Allows the user to manually enter states for all 7 tanks."""
+    
     clear_screen()
-    print("=========================================================")
-    print("                Custom Tank Configuration                ")
-    print("=========================================================\n")
+    print("You chose custom Tank Configuration...why?:\n")
     
     custom_states = {}
     for tank, valid_choices in VALID_STATES.items():
@@ -106,12 +97,21 @@ def get_custom_config():
     print("\nCustom configuration saved.\n")
     return custom_states
 
+def get_n_value():
+   
+    while True:
+        clear_screen()
+        print("Choose #batches (N) for the LTL property: \n")
+        print("We will verify the LTL property: G (batches < N)")
+        
+        val = input("Enter an integer value for N (e.g., 5, 10, 18): ").strip()
+        
+        
+        return int(val)
 
-    return max_depth, mem_limit_mb
 
-def generate_promela_model(states, template_path="plc.pml", output_path="run_model.pml"):
-    """Reads a Promela template, injects the initial configuration, and saves the executable model."""
-    print("\n[+] Generating Promela Model...")
+def generate_promela_model(states, n_value, template_path="plc.pml", output_path="run_model.pml"):
+    print("\n Generating Promela Model...")
     try:
         with open(template_path, 'r') as file:
             promela_code = file.read()
@@ -119,22 +119,26 @@ def generate_promela_model(states, template_path="plc.pml", output_path="run_mod
         print(f"Error: Could not find template file '{template_path}'.")
         sys.exit(1)
         
+    
     init_state_str = " ; ".join([f"{tank}={state}" for tank, state in states.items()])
     promela_code = promela_code.replace("@@INIT_STATE@@", init_state_str)
+    
+    # add ltl prop
+    ltl_string = f"\n\n/* LTL Property: G(batches < N) */\nltl check_batches {{ [] (batches < {n_value}) }}\n"
+    promela_code += ltl_string
     
     with open(output_path, 'w') as file:
         file.write(promela_code)
         
-    print(f"[+] Model generated successfully: {output_path}")
+    print(f"Model generated successfully: {output_path}")
     return output_path
 
 def run_spin_verification(model_path, max_depth, mem_limit_mb):
-    """Runs SPIN safety verification with custom bounds."""
-    print(f"\n[1/3] Translating {model_path} to C verifier using SPIN...")
+    print(f"\n[1/3] Generating C... {model_path} ")
     try:
         subprocess.run(["spin", "-a", model_path], check=True, stdout=subprocess.DEVNULL)
     except FileNotFoundError:
-        print("Error: 'spin' command not found. Please ensure SPIN is installed.")
+        print("Error: 'spin' command not found. Please ensure SPIN is installed and in your PATH.")
         sys.exit(1)
     except subprocess.CalledProcessError as e:
         print(f"SPIN Translation Error: {e}")
@@ -151,10 +155,11 @@ def run_spin_verification(model_path, max_depth, mem_limit_mb):
         print(f"Compilation Error: {e}")
         sys.exit(1)
 
-    print(f"[3/3] Executing safety verification (Max Depth: {max_depth})...")
+    print(f"[3/3] Executing LTL verification (Max Depth: {max_depth})...")
     print("---------------------------------------------------\n")
     try:
-        pan_command = ["./pan", f"-m{max_depth}"]
+        # Added the `-a` flag which is required by SPIN to search for Acceptance cycles (LTL)
+        pan_command = ["./pan", "-a", f"-m{max_depth}"]
         result = subprocess.run(pan_command, capture_output=True, text=True, check=True)
         print(result.stdout)
         
@@ -163,18 +168,21 @@ def run_spin_verification(model_path, max_depth, mem_limit_mb):
             print(result.stderr)
             
     except subprocess.CalledProcessError as e:
-        print(f"Verification encountered a deadlock or assertion violation:\n")
+        print(f"Verification encountered a deadlock or property violation:\n")
         print(e.stdout)
 
 if __name__ == "__main__":
     # 1. Get the Tank Configuration from the User
     tank_states = get_user_choice()
     
-    # 2. Get the Search Depth and Memory Limits
-    max_depth, mem_limit_mb = 100000, 4096  # Default values
+    # 2. Get the N value for the LTL Property
+    n_value = get_n_value()
     
-    # 3. Generate the Promela Code
-    output_model = generate_promela_model(tank_states)
+    # 3. Search Depth and Memory Limits
+    max_depth, mem_limit_mb = 1000000, 6500  # Default values
     
-    # 4. Run the Verification Pipeline
+    # 4. Generate the Promela Code
+    output_model = generate_promela_model(tank_states, n_value)
+    
+    # 5. Run the Verification Pipeline
     run_spin_verification(output_model, max_depth=max_depth, mem_limit_mb=mem_limit_mb)
