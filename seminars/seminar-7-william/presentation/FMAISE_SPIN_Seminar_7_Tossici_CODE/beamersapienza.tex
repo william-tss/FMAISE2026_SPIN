@@ -1,0 +1,516 @@
+\documentclass{beamer}
+\usepackage{amsfonts,amsmath,oldgerm}
+\usetheme{sintef}
+
+\newcommand{\testcolor}[1]{\colorbox{#1}{\textcolor{#1}{test}}~\texttt{#1}}
+
+\usepackage{xcolor}
+\usepackage{verbatim}
+\usepackage{pdfpages}
+\usepackage[ruled,linesnumbered]{algorithm2e}
+\usepackage{multirow}
+\usetikzlibrary{decorations.pathreplacing}
+
+
+\usetikzlibrary{positioning, automata, arrows.meta}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{xcolor}
+% Define code style
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{gray!80},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    showstringspaces=false,
+    breaklines=true,
+    frame=single
+}
+
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta, shapes}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\newcommand{\mathsc}[1]{\textsc{#1}}
+\usepackage{array}
+
+%% ── Theme ──────────────────────────────────────────────────────────────────
+
+%% ── Colours ────────────────────────────────────────────────────────────────
+\definecolor{myblue}{RGB}{30,80,160}
+\definecolor{mygreen}{RGB}{20,130,60}
+\definecolor{myred}{RGB}{190,30,30}
+\definecolor{myyellow}{RGB}{255,220,50}
+\definecolor{lightgray}{RGB}{240,240,245}
+\definecolor{accept}{RGB}{200,240,210}
+\definecolor{reject}{RGB}{255,215,215}
+\definecolor{active}{RGB}{220,235,255}
+
+%% ── Macros ─────────────────────────────────────────────────────────────────
+\newcommand{\Until}{\text{ U }}
+\newcommand{\Nxt}{\text{ X }}
+\newcommand{\Rls}{\text{ V }}
+\newcommand{\yes}{\textcolor{mygreen}{\textbf{Yes}}}
+\newcommand{\no}{\textcolor{myred}{\textbf{No}}}
+\newcommand{\hi}[1]{\textcolor{myblue}{\textbf{#1}}}
+
+%% ── Node table helper ───────────────────────────────────────────────────────
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+
+\setbeameroption{hide notes}
+%\setbeameroption{show notes on second screen=right}
+
+
+\usepackage[utf8]{inputenc}
+
+
+
+
+
+
+
+% Definizione del linguaggio Promela
+\lstdefinelanguage{promela}{
+  morekeywords={active, assert, atomic, bit, break, byte, chan, d_step, do, else, empty, false, fi, full, goto, if, init, inline, int, len, mtype, nfull, nempty, od, proctype, run, short, skip, timeout, true, unless, xr, xs},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morekeywords=[2]{_pid, _last}, % Variabili speciali
+}
+\lstdefinestyle{promela}{
+  morekeywords={active, assert, atomic, bit, break, byte, chan, d_step, do, else, empty, false, fi, full, goto, if, init, inline, int, len, mtype, nfull, nempty, od, proctype, run, short, skip, timeout, true, unless, xr, xs},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morekeywords=[2]{_pid, _last}, % Variabili speciali
+}
+
+
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize, % Font a spaziatura fissa
+    numbers=left,               % Numeri di riga a sinistra
+    numberstyle=\scriptsize,    % Dimensione dei numeri di riga
+    stepnumber=1,
+    numbersep=8pt,
+    mathescape=true,            % Permette di usare $s_0$ per ottenere il pedice
+    escapeinside={(*@}{@*)},
+    lineskip=-1pt,
+    morecomment=[s]{/*}{*/},    % Riconosce i commenti in stile C
+    commentstyle=\tiny,      % Stile corsivo per i commenti
+    xleftmargin=1em           % Margine per non far uscire i numeri dalla slide
+}
+
+\usefonttheme[onlymath]{serif}
+
+\titlebackground*{assets/background}
+
+\newcommand{\hrefcol}[2]{\textcolor{cyan}{\href{#1}{#2}}}
+
+\title{SPIN - Seminar }
+\subtitle{RAFT}
+\course{Formal Methods for AI-Based Systems Engineering (FMAISE)}
+\author{\href{mailto:andrea@gasparini.cloud}{William Tossici}}
+\IDnumber{1844504}
+\date{Academic Year 2025/2026\\[3mm]%
+  {\tiny Reference: D.~Ongaro, J.~Ousterhout,
+   \emph{In Search of an Understandable Consensus Algorithm}, USENIX ATC, 2014.}}
+
+\begin{document}
+\maketitle
+
+% ======================================================================
+% 0 — INTRODUCTION (case study + modeling overview)
+% ======================================================================
+\section{Introduction}
+
+\begin{frame}{The case study: formally verifying RAFT in SPIN}
+  \begin{itemize}
+    \item RAFT is a consensus algorithm for replicated state machines:
+          it elects a leader and replicates a log across the nodes.
+    \item Distributed protocols are hard to get right: subtle bugs hide in
+          message interleavings, timeouts and crashes, and testing rarely
+          reproduces them.
+    \item \textbf{Goal:} model the core of RAFT in Promela and verify its key
+          properties \emph{automatically and exhaustively} with SPIN.
+  \end{itemize}
+  \vfill
+  \textbf{What SPIN gives us:}
+  \begin{itemize}
+    \item Systems as concurrent processes communicating over channels (Promela).
+    \item Properties written in LTL; SPIN explores \textbf{every} reachable state.
+    \item We check \emph{safety} (at most one leader per term, log matching)
+          and \emph{liveness} (a leader is eventually elected).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Modeling overview: one base model, four extensions}
+  \begin{itemize}
+    \item Each of the $N$ nodes is a Promela process (\texttt{proctype Node}),
+          talking through one bounded, lossy inbox channel per node.
+    \item Every node runs the same state machine:
+          \texttt{FOLLOWER} / \texttt{CANDIDATE} / \texttt{LEADER}.
+    \item Verification relies on global "ghost" variables (e.g.
+          \texttt{leader\_count}) and LTL claims: they observe the protocol
+          without changing it.
+  \end{itemize}
+  \vfill
+  \textbf{Structure of the work:} a base model (leader election), then four
+  orthogonal extensions that each add one idea:
+  \begin{itemize}
+    \item explicit time \quad$\bullet$\quad crash / restart \quad$\bullet$\quad
+          log replication
+  \end{itemize}
+\end{frame}
+
+\section{Translating Raft to Promela}
+\begin{frame}{From RAFT to Promela: why simplify}
+  \begin{itemize}
+    \item SPIN verifies by exploring \textbf{all} reachable states
+          $\Rightarrow$ combinatorial explosion.
+    \item Every abstraction below keeps the state space
+          \textbf{finite and small}, while staying \emph{sound} for safety.
+  \end{itemize}
+  \vfill
+  \textbf{Anti-explosion toolkit (recurs in every model):}
+  \begin{itemize}
+    \item Single-slot channels: \texttt{BUF\_SIZE = 1}
+    \item Finite caps: \texttt{MAX\_TERM}, \texttt{MAX\_HB}, \texttt{MAX\_TIME}
+    \item Group sends inside \texttt{atomic\{\}} (no intermediate interleavings)
+    \item Canonicalization of "dead" variables (\texttt{clear\_msg})
+  \end{itemize}
+\end{frame}
+
+% ======================================================================
+% 1 — MODELLO BASE (Leader Election)
+% ======================================================================
+\section{Base model}
+
+\begin{frame}[fragile]{Base — a node is a state machine}
+\begin{lstlisting}[style=promela]
+proctype Node(byte id) {
+  byte state = FOLLOWER, currentTerm = 0, votedFor = 255,
+       votesRcv = 0, hb_count = 0;
+  do
+  :: (state == FOLLOWER)  -> ...  /* receive msg | election timeout | idle */
+  :: (state == CANDIDATE) -> ...  /* count votes | step-down | idle        */
+  :: (state == LEADER)    -> ...  /* heartbeat | step-down | idle          */
+  od
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item Three roles, a single infinite \texttt{do}: this is RAFT's state machine.
+    \item Nondeterminism among the branches models "what can happen now".
+    \item Finiteness guaranteed: every variable has a bounded domain.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Base — the network: \emph{lossy} channels}
+\begin{lstlisting}[style=promela]
+inline net_send(dest, mtyp, frm, trm, lp) {
+  if
+  :: nfull(inbox[dest]) -> inbox[dest] ! mtyp, frm, trm, lp  /* delivered */
+  :: skip                                                /* packet lost */
+  fi
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item Every send has \textbf{two nondeterministic outcomes}: delivered \emph{or} lost
+          $\Rightarrow$ safety must hold under any message loss.
+    \item Single-slot \texttt{inbox}: if full, the message is dropped (never blocking).
+    \item \texttt{nfull} (not \texttt{!full}): Promela forbids negating channel predicates.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Base — timeout \emph{without a clock} + atomic broadcast}
+\begin{lstlisting}[style=promela]
+:: (currentTerm < MAX_TERM) ->          /* election timeout */
+   currentTerm++; votedFor = id; votesRcv = 1;   /* self-vote */
+   state = CANDIDATE;
+   atomic {                             /* RequestVote to all, in one block */
+     i = 0;
+     do
+     :: (i < N) -> if :: (i != id) ->
+                        net_send(i, RequestVote, id, currentTerm, LOG_PRI(id))
+                     :: else -> skip fi; i++
+     :: (i >= N) -> break
+     od
+   }
+\end{lstlisting}
+  \begin{itemize}
+    \item In the base, the timeout is \textbf{pure nondeterminism}: no time, "fires whenever it can".
+    \item \texttt{atomic}: the broadcast is a single transition $\Rightarrow$ cuts useless interleavings.
+    \item \texttt{LOG\_PRI(id)=id+1}: the \emph{Leader Restriction} abstracted as static priorities.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Base — winning, safety monitor and the LTL property}
+\begin{lstlisting}[style=promela]
+:: (msg_type == VoteGranted) && (msg_term == currentTerm) ->
+   votesRcv++;
+   if :: (votesRcv > N/2) ->             /* majority */
+         state = LEADER; hb_count = 0;
+         leader_count[currentTerm]++      /* <-- monitor for verification */
+      :: else -> skip
+   fi
+
+ltl safety_one_leader {
+  [] ( leader_count[0] <= 1 && leader_count[1] <= 1
+    && leader_count[2] <= 1 && leader_count[3] <= 1 )
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item \texttt{leader\_count[t]} is not part of the protocol: it is a \emph{monitor} for the LTL.
+    \item Property: in every state, \textbf{at most one leader per term} (RAFT §5.2).
+  \end{itemize}
+\end{frame}
+
+% ======================================================================
+% 2 — TIMED (explicit time)
+% ======================================================================
+\section{Extension: explicit time}
+
+\begin{frame}[fragile]{Timed — the timeout becomes a \emph{deadline}}
+\begin{lstlisting}[style=promela]
+inline arm_election_timer(id) {       /* duration chosen NON-deterministically */
+  if :: elect_deadline[id] = now + T_SHORT
+     :: elect_deadline[id] = now + T_LONG
+  fi
+}
+
+/* the timeout is now GUARDED by the clock: */
+:: (now >= elect_deadline[id]) && (currentTerm < MAX_TERM) -> ...
+\end{lstlisting}
+  \begin{itemize}
+    \item Nondeterminism shifts from "who acts" to "how long the timeout lasts".
+    \item Asymmetric durations (\texttt{T\_SHORT}/\texttt{T\_LONG}): SPIN explores "who expires first".
+    \item A live leader, by sending heartbeats, \emph{re-arms} the followers' timers: it stabilizes.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Timed — advancing time: \emph{variable time advance}}
+\begin{lstlisting}[style=promela]
+proctype Advance() {
+  do
+  :: atomic {
+       all_quiescent && (now < MAX_TIME) ->   /* only if nobody can act now  */
+       mind = MAX_TIME;                        /* find the next deadline      */
+       k = 0;
+       do :: (k < N) -> ... /* min of elect_deadline[k], hb_deadline[k] */ ; k++
+          :: (k >= N) -> break od;
+       now = mind                              /* JUMP to the next event      */
+     }
+  :: else -> break
+  od
+}
+\end{lstlisting}
+\scriptsize{}
+  \begin{itemize}
+    \item Time \textbf{does not advance by +1}: it jumps straight to the next event instant.
+    \item Avoids filling the space with "empty" states where nothing happens.
+    \item Fires only when the system is quiescent (maximal progress: instantaneous actions first).
+  \end{itemize}
+\end{frame}
+
+% ======================================================================
+% 3 — CRASHES
+% ======================================================================
+\section{Extension: crash / restart}
+
+\begin{frame}[fragile]{Crashes — crash + \emph{persistence} (stable storage)}
+\begin{lstlisting}[style=promela]
+inline do_crash(decr_lc) {
+  atomic {
+    if :: (decr_lc == 1) -> leader_count[currentTerm]-- :: else -> skip fi;
+    crash_count++; state = CRASHED;
+    /* VOLATILE: reset */            votesRcv = 0; hb_count = 0; clear_msg();
+    /* PERSISTENT: currentTerm and votedFor untouched (survive the crash) */
+  }
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item \texttt{votedFor} \textbf{must} persist: otherwise a restarted node would vote twice
+          in the same term $\Rightarrow$ two leaders (safety violated).
+    \item The crash is offered \textbf{only at idle points} (quiescent): no state multiplication
+          at every active step.
+    \item \texttt{MAX\_CRASHES} budget: keeps the space finite.
+  \end{itemize}
+\end{frame}
+
+% ======================================================================
+% 6 — FUSION timed + crashes  (optional, if time allows)
+% ======================================================================
+\section{Fusion: time + crash}
+
+\begin{frame}[fragile]{Timed+crashes fusion — the \emph{timed} restart}
+\begin{lstlisting}[style=promela]
+inline do_crash(decr_lc) {
+  atomic {
+    ... state = CRASHED; down[id] = 1;
+    /* persistence: currentTerm, votedFor unchanged */
+    elect_deadline[id]   = OFF;        /* a dead node has no events of its own... */
+    hb_deadline[id]      = OFF;
+    restart_deadline[id] = now + T_DOWN   /* ...except its scheduled wake-up */
+  }
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item The leader crashes $\Rightarrow$ heartbeats stop $\Rightarrow$ followers time out
+          \emph{during the downtime} $\Rightarrow$ failover: a scenario controllable in time.
+    \item Dead node's timers set to \texttt{OFF}: otherwise \texttt{Advance} would never advance time again.
+  \end{itemize}
+\end{frame}
+
+
+% ======================================================================
+% 4 — LOG REPLICATION
+% ======================================================================
+\section{Extension: log replication}
+
+\begin{frame}[fragile]{Log — the \emph{log entry} abstraction}
+\begin{lstlisting}[style=promela]
+byte logv[N * MAX_LOG];               /* global, flattened log */
+#define LOG(n, k)  logv[(n)*MAX_LOG + (k)]   /* entry = just its TERM, 0 = empty */
+
+inline last_log(nid, lli, llt) {      /* node's (lastLogIndex, lastLogTerm) */
+  if :: (LOG(nid,1) != 0) -> lli = 2; llt = LOG(nid,1)
+     :: (LOG(nid,1) == 0) && (LOG(nid,0) != 0) -> lli = 1; llt = LOG(nid,0)
+     :: else -> lli = 0; llt = 0
+  fi
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item An entry is \textbf{just the term} it was created in: the payload is irrelevant for safety.
+    \item Only \texttt{MAX\_LOG=2} slots per node: enough for the consistency check.
+    \item \texttt{last\_log} implements the \emph{real Leader Restriction} (§5.4.1), no longer \texttt{LOG\_PRI}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Log — consistency check and \emph{Log Matching}}
+\begin{lstlisting}[style=promela]
+:: (msg_p1 == 1) ->                   /* the leader replicates the entry at slot 1 */
+   if :: (LOG(id,0) != 0) && (LOG(id,0) == msg_p2) ->   /* prevLogTerm matches? */
+         LOG(id,1) = msg_term;                          /* accept */
+         net_send(msg_from, AppendOk,   id, currentTerm, 1, 0, 0)
+      :: else ->
+         net_send(msg_from, AppendFail, id, currentTerm, 0, 0, 0)  /* reject */
+   fi
+
+ltl log_matching {
+  [] ( (LOG(0,1) != 0 && LOG(0,1) == LOG(1,1)) -> (LOG(0,0) == LOG(1,0)) && ... )
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item Accept entry $k$ \textbf{only if} entry $k{-}1$ matches the leader's.
+    \item \texttt{AppendEntries} content chosen nondeterministically: no \texttt{nextIndex[]}.
+    \item Property: same entries at the same index $\Rightarrow$ identical prefixes (§5.3).
+  \end{itemize}
+\end{frame}
+
+% ======================================================================
+% 5 — LIVENESS
+% ======================================================================
+% \section{Liveness verification}
+
+% \begin{frame}[fragile]{Liveness — "eventually a leader" (and the counterexample)}
+% \begin{lstlisting}[style=promela]
+% bit some_leader_elected = 0;          /* set to 1 when ANY node becomes leader */
+%    ...  state = LEADER; ...; some_leader_elected = 1
+
+% ltl liveness_eventually_leader {
+%   <> some_leader_elected              /* a flag: independent of N and MAX_TERM */
+% }
+% \end{lstlisting}
+%   \begin{itemize}
+%     \item The property is \textbf{FALSE}: pan finds a counterexample (errors: 1 + \texttt{.trail}).
+%     \item Reason: the network may lose every message and idle branches allow
+%           infinite "stuttering" $\Rightarrow$ elections can fail forever.
+%     \item This is \emph{expected}: consistent with RAFT (§5.2) — liveness relies on randomized timeouts.
+%     \item A global flag avoids fixed indices in the LTL (no "invalid array index").
+%   \end{itemize}
+% \end{frame}
+
+
+% ======================================================================
+\begin{frame}{Summary}
+  \begin{itemize}
+    \item A \textbf{common core} (state machine + lossy network + monitor + LTL) and
+          four orthogonal extensions: time, crash, log.
+    \item Each extension adds \emph{one} idea, reusing the same skeleton.
+    \item Every simplification either restricts behaviors in a \emph{sound} way
+          for safety, or affects only liveness.
+  \end{itemize}
+\end{frame}
+
+% ======================================================================
+% RESULTS — grafici di memoria e tempo
+% ======================================================================
+\section{Results}
+
+% \begin{frame}{Results: memory usage - SAFETY}
+%   \centering
+%   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]%
+%     {pdfs/raft_memory_usage_safety.pdf}
+% \end{frame}
+
+% \begin{frame}{Results: verification time - SAFETY}
+%   \centering
+%   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]%
+%     {pdfs/raft_time_usage_safety.pdf}
+% \end{frame}
+
+\begin{frame}{Results: memory and time - SAFETY}
+  \centering
+  \includegraphics[width=0.49\textwidth,height=0.74\textheight,keepaspectratio]%
+    {pdfs/raft_memory_usage_safety.pdf}\hfill
+  \includegraphics[width=0.49\textwidth,height=0.74\textheight,keepaspectratio]%
+    {pdfs/raft_time_usage_safety.pdf}
+
+  \vspace{2mm}
+  {\footnotesize Runs on a MacBook Pro (Apple M5, 16 GB RAM).}
+\end{frame}
+
+
+
+% \begin{frame}{Results: memory usage - LIVENESS}
+%   \centering
+%   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]%
+%     {pdfs/raft_memory_usage_liveness.pdf}
+% \end{frame}
+
+% \begin{frame}{Results: verification time - LIVENESS}
+%   \centering
+%   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]%
+%     {pdfs/raft_time_usage_liveness.pdf}
+% \end{frame}
+
+\begin{frame}{Results: memory and time - LIVENESS}
+  \centering
+  \includegraphics[width=0.49\textwidth,height=0.74\textheight,keepaspectratio]%
+    {pdfs/raft_memory_usage_liveness.pdf}\hfill
+  \includegraphics[width=0.49\textwidth,height=0.74\textheight,keepaspectratio]%
+    {pdfs/raft_time_usage_liveness.pdf}
+
+  \vspace{2mm}
+  {\footnotesize Runs on a MacBook Pro (Apple M5, 16 GB RAM).}
+\end{frame}
+
+\end{document}

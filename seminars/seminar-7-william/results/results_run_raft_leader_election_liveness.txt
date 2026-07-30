@@ -1,0 +1,336 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 1119)
+pan: wrote raft_leader_election.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 128 byte, depth reached 1274, errors: 1
+      520 states, stored (649 visited)
+      443 states, matched
+     1092 transitions (= visited+matched)
+       93 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.077	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.268	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 1138)
+pan: wrote raft_leader_election.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 136 byte, depth reached 1293, errors: 1
+      522 states, stored (651 visited)
+      437 states, matched
+     1088 transitions (= visited+matched)
+      108 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.082	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.268	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0.01 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 1199)
+pan: wrote raft_leader_election.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 136 byte, depth reached 1354, errors: 1
+      545 states, stored (674 visited)
+      450 states, matched
+     1124 transitions (= visited+matched)
+      123 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.085	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.268	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 1218)
+pan: wrote raft_leader_election.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 136 byte, depth reached 1373, errors: 1
+      547 states, stored (676 visited)
+      444 states, matched
+     1120 transitions (= visited+matched)
+      138 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.086	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.268	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 1279)
+pan: wrote raft_leader_election.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 136 byte, depth reached 1434, errors: 1
+      570 states, stored (699 visited)
+      457 states, matched
+     1156 transitions (= visited+matched)
+      153 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.089	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.268	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0.01 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 1298)
+pan: wrote raft_leader_election.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 136 byte, depth reached 1453, errors: 1
+      572 states, stored (701 visited)
+      451 states, matched
+     1152 transitions (= visited+matched)
+      168 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.089	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.268	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 1618)
+pan: wrote raft_leader_election.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 144 byte, depth reached 1773, errors: 1
+      672 states, stored (801 visited)
+      479 states, matched
+     1280 transitions (= visited+matched)
+      288 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.110	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.268	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds

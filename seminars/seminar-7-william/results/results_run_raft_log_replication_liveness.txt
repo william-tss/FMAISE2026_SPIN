@@ -1,0 +1,211 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 388)
+pan: wrote raft_log_replication.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+	+ Compression
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 132 byte, depth reached 453, errors: 1
+     4682 states, stored (27383 visited)
+    24471 states, matched
+    51854 transitions (= visited+matched)
+    21788 atomic steps
+hash conflicts:      1227 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.750	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.447	actual memory usage for states (compression: 59.58%)
+         	state-vector as stored = 64 byte + 36 byte overhead
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.925	total actual memory usage
+
+
+nr of templates: [ 0:globals 1:chans 2:procs ]
+collapse counts: [ 0:91 2:120 3:2 6:1 ]
+
+pan: elapsed time 0.01 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 388)
+pan: wrote raft_log_replication.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+	+ Compression
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 140 byte, depth reached 515, errors: 1
+    11903 states, stored (68650 visited)
+    61292 states, matched
+   129942 transitions (= visited+matched)
+    48997 atomic steps
+hash conflicts:      2491 (resolved)
+
+Stats on memory usage (in Megabytes):
+    1.998	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.837	actual memory usage for states (compression: 41.92%)
+         	state-vector as stored = 38 byte + 36 byte overhead
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  129.315	total actual memory usage
+
+
+nr of templates: [ 0:globals 1:chans 2:procs ]
+collapse counts: [ 0:318 2:262 3:2 6:1 ]
+
+pan: elapsed time 0.04 seconds
+pan: rate   1716250 states/second
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 388)
+pan: wrote raft_log_replication.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+	+ Compression
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 148 byte, depth reached 735, errors: 1
+    20877 states, stored (119127 visited)
+   106271 states, matched
+   225398 transitions (= visited+matched)
+    81645 atomic steps
+hash conflicts:      3120 (resolved)
+
+Stats on memory usage (in Megabytes):
+    3.663	equivalent memory usage for states (stored*(State-vector + overhead))
+    1.326	actual memory usage for states (compression: 36.19%)
+         	state-vector as stored = 31 byte + 36 byte overhead
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  129.804	total actual memory usage
+
+
+nr of templates: [ 0:globals 1:chans 2:procs ]
+collapse counts: [ 0:659 2:382 3:2 6:1 ]
+
+pan: elapsed time 0.06 seconds
+pan: rate   1985450 states/second
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 388)
+pan: wrote raft_log_replication.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+	+ Compression
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 148 byte, depth reached 867, errors: 1
+    27831 states, stored (158074 visited)
+   140972 states, matched
+   299046 transitions (= visited+matched)
+   107037 atomic steps
+hash conflicts:      3401 (resolved)
+
+Stats on memory usage (in Megabytes):
+    4.884	equivalent memory usage for states (stored*(State-vector + overhead))
+    1.716	actual memory usage for states (compression: 35.15%)
+         	state-vector as stored = 29 byte + 36 byte overhead
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  130.194	total actual memory usage
+
+
+nr of templates: [ 0:globals 1:chans 2:procs ]
+collapse counts: [ 0:857 2:454 3:2 6:1 ]
+
+pan: elapsed time 0.07 seconds
+pan: rate   2258200 states/second

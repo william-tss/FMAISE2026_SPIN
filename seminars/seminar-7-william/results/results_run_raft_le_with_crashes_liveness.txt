@@ -1,0 +1,192 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 383)
+pan: wrote raft_le_with_crashes.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 104 byte, depth reached 460, errors: 1
+      160 states, stored (248 visited)
+      149 states, matched
+      397 transitions (= visited+matched)
+       63 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.020	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.258	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 383)
+pan: wrote raft_le_with_crashes.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 112 byte, depth reached 460, errors: 1
+      160 states, stored (248 visited)
+      149 states, matched
+      397 transitions (= visited+matched)
+       63 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.021	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.258	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 383)
+pan: wrote raft_le_with_crashes.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 120 byte, depth reached 460, errors: 1
+      160 states, stored (248 visited)
+      149 states, matched
+      397 transitions (= visited+matched)
+       63 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.023	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.258	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pan: ltl formula liveness_eventually_leader
+pan:1: acceptance cycle (at depth 383)
+pan: wrote raft_le_with_crashes.pml.trail
+
+(Spin Version 6.5.1 -- 20 December 2019)
+Warning: Search not completed
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (liveness_eventually_leader)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness enabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 120 byte, depth reached 460, errors: 1
+      160 states, stored (248 visited)
+      149 states, matched
+      397 transitions (= visited+matched)
+       63 atomic steps
+hash conflicts:         0 (resolved)
+
+Stats on memory usage (in Megabytes):
+    0.023	equivalent memory usage for states (stored*(State-vector + overhead))
+    0.258	actual memory usage for states
+  128.000	memory used for hash table (-w24)
+    0.534	memory used for DFS stack (-m10000)
+  128.730	total actual memory usage
+
+
+
+pan: elapsed time 0 seconds

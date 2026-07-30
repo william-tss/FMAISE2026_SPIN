@@ -1,0 +1,19 @@
+\frametitle{Log — consistency check and \emph {Log Matching}}
+\begin{lstlisting}[style=promela]
+:: (msg_p1 == 1) ->                   /* the leader replicates the entry at slot 1 */
+   if :: (LOG(id,0) != 0) && (LOG(id,0) == msg_p2) ->   /* prevLogTerm matches? */
+         LOG(id,1) = msg_term;                          /* accept */
+         net_send(msg_from, AppendOk,   id, currentTerm, 1, 0, 0)
+      :: else ->
+         net_send(msg_from, AppendFail, id, currentTerm, 0, 0, 0)  /* reject */
+   fi
+
+ltl log_matching {
+  [] ( (LOG(0,1) != 0 && LOG(0,1) == LOG(1,1)) -> (LOG(0,0) == LOG(1,0)) && ... )
+}
+\end{lstlisting}
+  \begin{itemize}
+    \item Accept entry $k$ \textbf{only if} entry $k{-}1$ matches the leader's.
+    \item \texttt{AppendEntries} content chosen nondeterministically: no \texttt{nextIndex[]}.
+    \item Property: same entries at the same index $\Rightarrow$ identical prefixes (§5.3).
+  \end{itemize}
